@@ -1,0 +1,23 @@
+GET http://localhost:3000/users HTTP/1.1
+
+###
+
+GET http://localhost:3000/users/456 HTTP/1.1
+
+###
+GET http://localhost:3000/products HTTP/1.1
+
+###
+GET http://localhost:3000/ HTTP/1.1
+
+###
+POST http://localhost:3000/users HTTP/1.1
+content-type: application/json
+
+{
+    "username": "sample",
+    "password": "test123123",
+    "firstName": "Minh",
+    "lastName": "Nguyễn",
+    "avartar": "13"
+}
