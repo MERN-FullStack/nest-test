@@ -1,6 +1,6 @@
 import { Expose, Transform } from "class-transformer";
 import { IsNotEmpty, Length } from "class-validator";
-import { BaseDto } from "./common/base.dto";
+import { BaseDto } from "../common/base.dto";
 
 export class UserDto extends BaseDto{
     @IsNotEmpty()
