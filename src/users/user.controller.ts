@@ -1,14 +1,9 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, UsePipes, ValidationPipe } from "@nestjs/common";
-import { UserDto } from "src/user.dto";
-import { UserRepository } from "./user.repository";
+import { UserDto } from "src/users/user.dto";
 import { UserService } from "./user.service";
 @Controller('users')
 export class UserController{
-    userService : UserService
-    constructor(){
-        const userRepository = new UserRepository();
-        this.userService = new UserService(userRepository);
-    }
+    constructor(private readonly userService: UserService){}
     @Get()
     getAllUsers(){
         return[

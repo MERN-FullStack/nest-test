@@ -21,3 +21,13 @@ content-type: application/json
     "lastName": "Nguyễn",
     "avartar": "13"
 }
+
+###
+POST http://localhost:3000/posts HTTP/1.1
+content-type: application/json
+
+{
+    "title": "sample123123",
+    "description": "test123123",
+    "content": "13"
+}
