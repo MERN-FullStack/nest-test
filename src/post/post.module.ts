@@ -1,11 +1,10 @@
 import { Module } from "@nestjs/common";
-import { StoreModule } from "src/store/store.module";
+import { Dynamic_Module } from "src/dynamic_module/dynamic.module";
 import { PostController } from "./post.controller";
 import { PostService } from "./post.service";
 
 @Module({
-    imports: [StoreModule.register({
-        dirname: 'store',
+    imports: [Dynamic_Module.forFeature({
         filename: 'post.json'
     })],
     controllers: [PostController],
