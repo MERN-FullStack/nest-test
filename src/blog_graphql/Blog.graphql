@@ -1,0 +1,35 @@
+type Query {
+    getBlogs: [Blog]
+    getBlogById(_id: ID!): Blog
+    getBlogBySlug(slug: String!): Blog
+}
+
+type Mutation {
+    createBlog(input: BlogInput!): Blog
+    updateBlog(_id: ID!, input: BlogInput!): Blog
+    deleteBlog(_id: ID!)
+}
+type Blog {
+    _id: ID!
+    title: String
+    slug: String
+}
+
+input BlogInput {
+    title: String, 
+    slug: String
+}
+
+# GraphQL cung cấp nhiều loại định nghĩa cho các loại dữ liệu khác nhau. Sau đây là một số định nghĩa phổ biến trong GraphQL:
+
+# type: được sử dụng để định nghĩa một kiểu đối tượng (object) trong GraphQL. Ví dụ, bạn có thể định nghĩa một kiểu đối tượng User với các trường như id, name, email bằng cách sử dụng type.
+
+# input: được sử dụng để định nghĩa một kiểu đầu vào dữ liệu. Kiểu này sẽ được sử dụng để truyền dữ liệu đến các mutation hoặc query trong GraphQL.
+
+# enum: được sử dụng để định nghĩa một kiểu dữ liệu đặc biệt trong GraphQL, bao gồm các giá trị có thể được liệt kê trước và các giá trị này không thể thay đổi.
+
+# union: được sử dụng để định nghĩa một kiểu dữ liệu đại diện cho một hoặc nhiều kiểu đối tượng khác nhau trong GraphQL. Kiểu đối tượng này được sử dụng để định nghĩa các trường động (dynamic fields) trong GraphQL.
+
+# interface: được sử dụng để định nghĩa một kiểu đối tượng (object) trừu tượng trong GraphQL. Kiểu này được sử dụng để định nghĩa các trường chung cho các kiểu đối tượng khác nhau.
+
+# scalar: được sử dụng để định nghĩa một kiểu dữ liệu nguyên thủy (primitive) trong GraphQL, bao gồm các kiểu dữ liệu như Int, Float, String, Boolean, và ID.
