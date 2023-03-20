@@ -8,7 +8,11 @@ export class PostDto extends BaseDto{
     @Expose()
     title: string;
 
+    @IsNotEmpty()
+    @Expose()
     description: string;
 
+    @IsNotEmpty()
+    @Expose()
     content: string;
 }
