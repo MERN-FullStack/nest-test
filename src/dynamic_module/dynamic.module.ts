@@ -1,64 +1,65 @@
-import { DynamicModule, Module } from "@nestjs/common";
-import { Dynamic_Service } from "./dynamic.service";
+import { DynamicModule, Module } from '@nestjs/common';
+import { Dynamic_Service } from './dynamic.service';
 
-export interface StoreRootConfig{
-    dirname: string,
-}
-export interface StoreFeatureConfig{
-    filename: string
-}
-//! partial = ? It's okay to have it, it's okay not to have it
-export type StoreConfig = Partial<StoreRootConfig & StoreFeatureConfig>;
+import {
+  StoreConfig,
+  StoreFeatureConfig,
+  StoreRootConfig,
+} from './dynamic.config';
 
-let rootStoreConfig: StoreConfig 
+let rootStoreOption: StoreConfig;
+const STORE_CONFIG = 'STORE_CONFIG';
+const DEFAULT_STORE_DIR = 'store';
+const DEFAULT_FILE_NAME = 'data.json';
 
-export const STORE_CONFIG_TOKEN = 'STORE-CONFIG'
-const DEFAULT_STORE_DIRNAME = 'store'
-const DEFAULT_FILE_NAME = 'data.json'
 @Module({
-    providers: [Dynamic_Service],
-    exports: [Dynamic_Service]
+  providers: [Dynamic_Service],
+  exports: [Dynamic_Service],
 })
-class Root_Dynamic_Module{}
-
+class RootStoreModule {}
 
 @Module({})
-export class Dynamic_Module{
-    static forRoot(configRoot?: StoreRootConfig): DynamicModule{
-        rootStoreConfig = this.createConfig(configRoot)
-        return {
-            module: Root_Dynamic_Module,
-            providers: [
-                {
-                    provide: STORE_CONFIG_TOKEN,
-                    useValue: rootStoreConfig
-                }
-            ],
-        }
-    }
+export class Dynamic_Module {
+  static forRoot(storeConfig?: StoreRootConfig): DynamicModule {
+    rootStoreOption = Dynamic_Module.buildStoreOptions(storeConfig);
+    return {
+      module: RootStoreModule,
+      providers: [
+        {
+          provide: STORE_CONFIG,
+          useValue: rootStoreOption,
+        },
+      ],
+    };
+  }
 
-    static forFeature(configFeature?: StoreFeatureConfig): DynamicModule{
-        const token = 'STORE_SERVICE' + rootStoreConfig.filename;
-        return {
-            module: Dynamic_Module,
-            providers: [
-                {
-                    provide: token,
-                    useFactory: ()=>{
-                        const featureStoreConfig = this.createConfig({...rootStoreConfig,...configFeature})
-                        return new Dynamic_Service(featureStoreConfig)
-                    }
-                }
-            ],
-            exports: [token]
-        }
-    }
-    private static createConfig(config: StoreConfig): StoreConfig{
-        const defaultConfig: StoreConfig ={
-            dirname: DEFAULT_STORE_DIRNAME,
-            filename: DEFAULT_FILE_NAME
-        }
-        return {...defaultConfig, ...config};
-        // return Object.assign(defaultConfig, config)
-    }
+  static forFeature(storeConfig?: StoreFeatureConfig): DynamicModule {
+    const token = 'STORE_SERVICE' + storeConfig.filename;
+    return {
+      module: Dynamic_Module,
+      providers: [
+        {
+          provide: token,
+          useFactory: () => {
+            const storeOption = Dynamic_Module.buildStoreOptions({
+              ...rootStoreOption,
+              ...storeConfig,
+            });
+            return new Dynamic_Service(storeOption);
+          },
+        },
+      ],
+      exports: [token],
+    };
+  }
+
+  private static buildStoreOptions(storeOptions: StoreConfig) {
+    return Object.assign(
+      {
+        dirname: DEFAULT_STORE_DIR,
+        filename: DEFAULT_FILE_NAME,
+      },
+      storeOptions,
+    );
+  }
 }
